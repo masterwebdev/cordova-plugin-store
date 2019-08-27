@@ -1,41 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="com.autovitalsinc.store"
-        version="0.01">
+	id="com-autovitalsinc-store"
+	version="0.01">
 
-  <name>AV Store</name>
+	<name>AV Store</name>
 
-  <engines>
-    <engine name="cordova" version=">=3.4.0"/>
-  </engines>
-  
-  <js-module src="www/store.js" name="store">
-    <clobbers target="store" />
-  </js-module>
+	<engines>
+		<engine name="cordova" version=">=3.4.0"/>
+	</engines>
 
-  <platform name="ios">
-    
-    <config-file target="config.xml" parent="/widget">
-      <feature name="Store">
-        <param name="ios-package" value="AVStore" />
-        <param name="onload" value="true"/>
-      </feature>
-    </config-file>
+	<js-module src="www/store.js" name="store">
+		<clobbers target="window.store" />
+	</js-module>
 
-    <header-file src="src/ios/AVStore.h" target-dir="StorePlugin"/>
-    <source-file src="src/ios/AVStore.m" target-dir="StorePlugin"/>
-  </platform>
-  
-    <!-- android -->
-    <platform name="android">
-      <config-file target="res/xml/config.xml" parent="/*">
-        <feature name="Store">
-          <param name="android-package" value="com.autovitalsinc.store.Store" />
-          <param name="onload" value="true" />
-        </feature>
-      </config-file>
+	<platform name="ios">
 
-      <source-file src="src/android/Store.java" target-dir="src/com/autovitalsinc/store/" />
-    </platform>
+		<config-file target="config.xml" parent="/widget">
+			<feature name="Store">
+				<param name="ios-package" value="AVStore" />
+				<param name="onload" value="true"/>
+			</feature>
+		</config-file>
+
+		<header-file src="src/ios/AVStore.h" target-dir="StorePlugin"/>
+		<source-file src="src/ios/AVStore.m" target-dir="StorePlugin"/>
+	</platform>
+
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="Store">
+				<param name="android-package" value="com.autovitalsinc.store.Store" />
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+
+		<source-file src="src/android/Store.java" target-dir="src/com/autovitalsinc/store/" />
+	</platform>
 
 </plugin>
