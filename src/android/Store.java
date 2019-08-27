@@ -3,13 +3,17 @@
 package com.autovitalsinc.store;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -19,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 
@@ -63,7 +68,7 @@ public class Store extends CordovaPlugin {
 			initdirs(callbackContext);
 		}else if(action.equals("storefile")) {
 			storefile(" ",callbackContext);
-		}else if(action.equals("fetchfile")) {
+		}else if(action.equals("loadfile")) {
 			loadfile(args,callbackContext);
 		}
 		
@@ -158,7 +163,10 @@ public class Store extends CordovaPlugin {
         //    public void run() {
             	
             	File file = new File(cordova.getActivity().getApplicationContext().getExternalFilesDir(null), "dmpn");		
-				String path = file.getAbsolutePath() + "/" + filename;
+				//String path = file.getAbsolutePath() + "/" + filename;
+				String path = filename;
+
+				//path="/data/user/0/com.autovitals.smartflowxturbo/files/map.json";
 				
 				/*try {
 					FileInputStream fis = cordova.getActivity().getApplicationContext().openFileInput(filename);
@@ -211,6 +219,58 @@ public class Store extends CordovaPlugin {
 
 	private void loadfile(JSONArray args, final CallbackContext cb) {
 	    
+		String path="";
+		String url="";
+
+		try {
+			path=args.getString(0);
+			url=args.getString(1);
+		} catch (Exception e) {
+			Log.d(TAG, "PARSE FILE URL ERROR ");
+			cb.error("error");
+		}
+
+		Log.d(TAG, "PATH "+path);
+		Log.d(TAG, "URL "+url);
+
+
+		/*File directory = new File("file:///android_asset/www/data/");
+		File[] files = directory.listFiles();
+		for (int i = 0; i < files.length; i++)
+		{
+			Log.d(TAG, "FILE: "+files[i].getAbsolutePath());
+		}
+
+
+
+
+
+		try {
+			URL u = new URL(url);
+			InputStream is = u.openStream();
+
+			DataInputStream dis = new DataInputStream(is);
+
+			byte[] buffer = new byte[1024];
+			int length;
+
+			FileOutputStream fos = new FileOutputStream(new File(path));
+			while ((length = dis.read(buffer))>0) {
+				fos.write(buffer, 0, length);
+			}
+
+			cb.success();
+
+		} catch (MalformedURLException mue) {
+			Log.e("SYNC getUpdate", "malformed url error", mue);
+			cb.error("error");
+		} catch (IOException ioe) {
+			Log.e("SYNC getUpdate", "io error", ioe);
+			cb.error("error");
+		} catch (SecurityException se) {
+			Log.e("SYNC getUpdate", "security error", se);
+			cb.error("error");
+		}*/
 	}
 	
 }
