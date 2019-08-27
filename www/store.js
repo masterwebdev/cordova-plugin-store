@@ -20,6 +20,9 @@ module.exports = {
     },
     storefile: function (path, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "Store", "storefile", [path]);
+    },
+    loadfile: function (params, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "Store", "loadfile", params);
     }
 };
 });

@@ -63,6 +63,8 @@ public class Store extends CordovaPlugin {
 			initdirs(callbackContext);
 		}else if(action.equals("storefile")) {
 			storefile(" ",callbackContext);
+		}else if(action.equals("fetchfile")) {
+			loadfile(args,callbackContext);
 		}
 		
 		return true;
@@ -205,6 +207,10 @@ public class Store extends CordovaPlugin {
 	    } else {
 	        cb.error("Expected one non-empty string argument.");
 	    }
+	}
+
+	private void loadfile(JSONArray args, final CallbackContext cb) {
+	    
 	}
 	
 }
