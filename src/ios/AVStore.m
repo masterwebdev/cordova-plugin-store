@@ -4,10 +4,6 @@
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
 
-
-#import "CDVJpegHeaderWriter.h"
-#import "UIImage+CropScaleOrientation.h"
-#import <ImageIO/CGImageProperties.h>
 #import <AssetsLibrary/ALAssetRepresentation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVFoundation.h>
@@ -82,10 +78,14 @@
         NSString* data = [command.arguments objectAtIndex:1]; //[NSString stringWithFormat:@"%@%@", @"", [command.arguments objectAtIndex:1]];
         NSString* apnd = [command.arguments objectAtIndex:2];
     
-    //NSLog(@"WRITE DATA %@", data);
+    	//NSLog(@"WRITE DATA %@", data);
         
         NSError *error;
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:filename];
+        //NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:filename];
+    
+        NSString *filePath = filename;
+    
+    	//NSLog(@"WRITE PATH %@", filePath);
         
         if([apnd isEqualToString:@"true"]){
             //NSLog(@"APPEND TO %@", filename);
@@ -120,13 +120,29 @@
 - (void)readfile:(CDVInvokedUrlCommand*)command
 {
     //[self.commandDelegate runInBackground:^{
-        NSString* filename = [command.arguments objectAtIndex:0];
+       // NSString* filename = [command.arguments objectAtIndex:0];
+    
+    	//NSLog(@"READ FROM %@", filename);
         
         NSError *error;
         
-        NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:filename];
         
-        NSString *str = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+    
+    
+        
+        //NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:filename];
+    
+    	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+   		NSString *documentsDirectory = [paths objectAtIndex:0];
+    	NSString *filePath1 = [documentsDirectory stringByAppendingPathComponent:@"NoCloud/map.json"];
+    
+    	//NSLog(@"READ FROMXXX %@", filePath1);
+    
+    	//NSString *filePath1=@"/var/mobile/Containers/Data/Application/ABBF75EB-0520-4FAC-81F2-A7A63141014E/Library/NoCloud/map.json";
+        
+        NSString *str = [NSString stringWithContentsOfFile:filePath1 encoding:NSUTF8StringEncoding error:&error];
+    
+    	//NSLog(@"STR %@", str);
         
         if(str == nil){
             str=@"";
@@ -163,44 +179,36 @@
     
 }
 
-- (void)startbeep:(CDVInvokedUrlCommand*)command
+- (void)loadfile:(CDVInvokedUrlCommand*)command
 {
-    [self scheduleLoopInSeconds:11.0];
-}
-
-- (void)scheduleLoopInSeconds:(NSTimeInterval)delayInSeconds
-{
-
-	[self playbeep];
-
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_after(popTime, queue, ^{
-        [self scheduleLoopInSeconds:delayInSeconds];//set next iteration
-    });
-
-}
-
-AVAudioPlayer *audioPlayer;
-
-- (void)playbeep{
-	NSLog(@"BEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEP");
+    //[self.commandDelegate runInBackground:^{
 
 
-    NSString* path1 = [[NSBundle mainBundle]
-                      pathForResource:@"t2" ofType:@"wav"];
+    NSLog(@"READ FROM %@", @"111");
 
-    NSURL* url = [NSURL fileURLWithPath:path1];
+    NSString* filename = [command.arguments objectAtIndex:0];
 
+    NSLog(@"READ FROM %@", filename);
 
-    audioPlayer = [[AVAudioPlayer alloc]
-                   initWithContentsOfURL:url error:NULL];
+    NSError *error;
 
-    audioPlayer.volume        = 1.0;
-    audioPlayer.numberOfLoops = 1;
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:filename];
 
-    [audioPlayer play];
+    NSString *str = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+
+    if(str == nil){
+        str=@"";
+    }
+
+    //NSLog(@"READ FROM %@", str);
+
+    CDVPluginResult* result = [CDVPluginResult
+                               resultWithStatus:CDVCommandStatus_OK
+                               messageAsString:str];
+
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    //}];
+
 }
 
 @end

@@ -10,11 +10,8 @@
 - (void) savefile:(CDVInvokedUrlCommand*)command;
 - (void) readfile:(CDVInvokedUrlCommand*)command;
 - (void) storefile:(CDVInvokedUrlCommand*)command;
+- (void) loadfile:(CDVInvokedUrlCommand*)command;
 
-
-- (void) startbeep:(CDVInvokedUrlCommand*)command;
-- (void) scheduleLoopInSeconds:(NSTimeInterval)delayInSeconds;
-- (void) playbeep;
 
 
 @end

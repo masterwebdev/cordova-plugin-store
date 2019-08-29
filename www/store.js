@@ -6,7 +6,7 @@ module.exports = {
     	if(typeof params.append == 'undefined'){
     		params.append='false';
     	}
-        cordova.exec(successCallback, errorCallback, "Store", "savefile", [params.filename,JSON.stringify(params.data),params.append]);
+        cordova.exec(successCallback, errorCallback, "Store", "savefile", [params.filename,params.data,params.append]);
     },
     truncate: function (params, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "Store", "truncate", [params.filename,params.length]);

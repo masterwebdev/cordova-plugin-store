@@ -121,8 +121,13 @@ public class Store extends CordovaPlugin {
         //    public void run() {
 				FileOutputStream outStream = null;
 				
-				File file = new File(cordova.getActivity().getApplicationContext().getExternalFilesDir(null), "dmpn");		
-				String path = file.getAbsolutePath() + "/" + filename;
+				//File file = new File(cordova.getActivity().getApplicationContext().getExternalFilesDir(null), "dmpn");
+				//String path = file.getAbsolutePath() + "/" + filename;
+
+				String path = filename;
+
+				File file = new File(path);
+				file.getParentFile().mkdirs();
 				
 				
 				//Log.d(TAG, filename);
