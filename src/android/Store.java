@@ -2,29 +2,24 @@
 */
 package com.autovitalsinc.store;
 
+import android.util.Base64;
+import android.util.Log;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.file.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import android.content.Context;
-import android.os.Environment;
-import android.util.Log;
 
 
 public class Store extends CordovaPlugin {
@@ -161,18 +156,38 @@ public class Store extends CordovaPlugin {
 	}
 	
 	private void readfile(final String filename, final CallbackContext cb) {
-		
+
+		String base64 = "";
+		try {
+			File file = new File(filename);
+			byte[] buffer = new byte[(int) file.length() + 100];
+			@SuppressWarnings("resource")
+			int length = new FileInputStream(file).read(buffer);
+			base64 = Base64.encodeToString(buffer, 0, length,
+					Base64.DEFAULT);
+			cb.success(base64);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void readfile2(final String filename, final CallbackContext cb) {
+
 		//cordova.getThreadPool().execute(new Runnable() {
 		//this.cordova.getActivity().runOnUiThread(new Runnable() {
 		//	@Override
-        //    public void run() {
-            	
-            	File file = new File(cordova.getActivity().getApplicationContext().getExternalFilesDir(null), "dmpn");		
-				//String path = file.getAbsolutePath() + "/" + filename;
-				String path = filename;
+		//    public void run() {
 
-				//path="/data/user/0/com.autovitals.smartflowxturbo/files/map.json";
-				
+		File file = new File(cordova.getActivity().getApplicationContext().getExternalFilesDir(null), "dmpn");
+		//String path = file.getAbsolutePath() + "/" + filename;
+		String path = filename;
+
+
+
+
+		//path="/data/user/0/com.autovitals.smartflowxturbo/files/map.json";
+
 				/*try {
 					FileInputStream fis = cordova.getActivity().getApplicationContext().openFileInput(filename);
 					InputStreamReader isr = new InputStreamReader(fis);
@@ -188,7 +203,8 @@ public class Store extends CordovaPlugin {
 						Log.d(TAG, e.getMessage());
 						cb.error("error");
 					}*/
-				
+
+
 				StringBuilder text = new StringBuilder();
 
 				try {
@@ -200,19 +216,21 @@ public class Store extends CordovaPlugin {
 				        text.append('\n');
 				    }
 				    br.close();
-				    
-				    cb.success(text.toString());
+
+					cb.success(text.toString());
 				}
 				catch (IOException e) {
 					Log.d(TAG, "READ FILE ERROR "+path);
 					Log.d(TAG, e.getMessage());
 					cb.error("error");
 				}
-				
-        //    }
-        //});
+
+		//    }
+		//});
 
 	}
+
+
 	
 	private void storefile(String message, final CallbackContext cb) {
 	    if (message != null && message.length() > 0) {

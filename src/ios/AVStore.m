@@ -4,13 +4,6 @@
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
 
-#import <AssetsLibrary/ALAssetRepresentation.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <AVFoundation/AVFoundation.h>
-#import <AudioToolbox/AudioToolbox.h>
-#import <ImageIO/CGImageSource.h>
-#import <ImageIO/CGImageProperties.h>
-#import <ImageIO/CGImageDestination.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <objc/message.h>
 
@@ -72,7 +65,7 @@
 
 - (void)savefile:(CDVInvokedUrlCommand*)command
 {
-    //[self.commandDelegate runInBackground:^{
+    [self.commandDelegate runInBackground:^{
         
         NSString* filename = [command.arguments objectAtIndex:0];
         NSString* data = [command.arguments objectAtIndex:1]; //[NSString stringWithFormat:@"%@%@", @"", [command.arguments objectAtIndex:1]];
@@ -113,11 +106,35 @@
                                    messageAsString:filename];
         
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    //}];
+    }];
 
 }
 
 - (void)readfile:(CDVInvokedUrlCommand*)command
+{
+        NSError *error;
+    
+        /*NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+           NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *filePath1 = [documentsDirectory stringByAppendingPathComponent:@"NoCloud/map.json"];*/
+    
+    NSString* filename = [command.arguments objectAtIndex:0];
+
+    
+     NSData * dataFromFile = [NSData dataWithContentsOfFile:filename];
+    NSString *base64String;
+    base64String = [dataFromFile base64EncodedStringWithOptions:kNilOptions];
+    
+        CDVPluginResult* result = [CDVPluginResult
+                                   resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:base64String];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    //}];
+    
+}
+
+- (void)readfile2:(CDVInvokedUrlCommand*)command
 {
     //[self.commandDelegate runInBackground:^{
        // NSString* filename = [command.arguments objectAtIndex:0];
