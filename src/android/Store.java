@@ -19,7 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-
+import java.nio.charset.StandardCharsets;
 
 
 public class Store extends CordovaPlugin {
@@ -46,6 +46,23 @@ public class Store extends CordovaPlugin {
 			//Log.d(TAG, filename);
 			
 			savefile(filename,data,apnd,callbackContext);
+		}else if(action.equals("savefile64")) {
+
+			String filename = args.getString(0);
+			//String data = args.getString(1).toString();
+			String data = args.getString(1);
+			String append = args.getString(2);
+			Boolean apnd=false;
+
+			//Log.d(TAG, append);
+
+			if(append.equals("true")){
+				apnd=true;
+			}
+
+			//Log.d(TAG, filename);
+
+			savefile64(filename,data,apnd,callbackContext);
 		}else if(action.equals("readfile")) {
 			
 			String filename = args.getString(0);
@@ -53,6 +70,13 @@ public class Store extends CordovaPlugin {
 			//Log.d(TAG, filename);
 			
 			readfile(filename,callbackContext);
+		}else if(action.equals("readfileplain")) {
+
+		String filename = args.getString(0);
+
+		//Log.d(TAG, filename);
+
+			readfileplain(filename,callbackContext);
 		}else if(action.equals("truncate")) {
 			
 			String filename = args.getString(0);
@@ -154,6 +178,33 @@ public class Store extends CordovaPlugin {
 		return;
 
 	}
+
+	private void savefile64(final String filename, final String data, final Boolean append, final CallbackContext cb) {
+
+		FileOutputStream outStream = null;
+
+		String path = filename;
+
+		File file = new File(path);
+		file.getParentFile().mkdirs();
+
+		try {
+			outStream = new FileOutputStream(path,append);
+			byte[] buffer = android.util.Base64.decode(data, android.util.Base64.DEFAULT);
+			outStream.write(buffer);
+			outStream.close();
+			//Log.d(TAG, path);
+			cb.success();
+		} catch (Exception e) {
+			Log.d(TAG, "SAVE FILE ERROR "+path);
+			cb.error("error");
+		}
+		//}
+		//});
+
+		return;
+
+	}
 	
 	private void readfile(final String filename, final CallbackContext cb) {
 
@@ -165,9 +216,32 @@ public class Store extends CordovaPlugin {
 			int length = new FileInputStream(file).read(buffer);
 			base64 = Base64.encodeToString(buffer, 0, length,
 					Base64.DEFAULT);
+			//String v = new String( buffer, StandardCharsets.UTF_8 );
 			cb.success(base64);
 		} catch (IOException e) {
 			e.printStackTrace();
+			cb.error("error");
+		}
+
+	}
+
+	private void readfileplain(final String filename, final CallbackContext cb) {
+
+		String base64 = "";
+		try {
+			File file = new File(filename);
+			byte[] buffer = new byte[(int) file.length() + 100];
+			@SuppressWarnings("resource")
+			int length = new FileInputStream(file).read(buffer);
+			//base64 = Base64.encodeToString(buffer, 0, length,
+			//		Base64.DEFAULT);
+			//String v = new String( buffer );
+
+			String v = new String(buffer);
+			cb.success(v);
+		} catch (IOException e) {
+			e.printStackTrace();
+			cb.error("error");
 		}
 
 	}
