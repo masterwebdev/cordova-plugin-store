@@ -140,18 +140,13 @@
             NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:filePath];
             
             if (fileHandle){
-
-                 NSLog(@"sfxlog WRITE try 1");
                 
                 [fileHandle seekToEndOfFile];
                 [fileHandle writeData:[base64String dataUsingEncoding:NSUTF8StringEncoding]];
                 [fileHandle closeFile];
-
-                NSLog(@"sfxlog WRITE try 2");
                 
             }
             else{
-                NSLog(@"sfxlog WRITE try 3");
                 [base64String writeToFile:filePath atomically:NO encoding:NSUTF8StringEncoding error:&error];
             }
         }else{
@@ -161,11 +156,9 @@
             //[data writeToFile:filePath atomically:NO encoding:NSUTF8StringEncoding error:&error];
             //NSLog(@"sfxlog WRITE success 5");
 
+            //[data writeToFile:filePath atomically:NO encoding:NSUTF8StringEncoding error:&error];
 
-                NSLog(@"sfxlog WRITE try 4");
-                //[data writeToFile:filePath atomically:NO encoding:NSUTF8StringEncoding error:&error];
-
-                [nsdata writeToFile:filePath options:NSDataWritingAtomic error:&error];
+            //[data writeToFile:filePath atomically:NO encoding:NSUTF8StringEncoding error:&error];
 
 
         }*/
@@ -239,18 +232,12 @@
     	//NSLog(@"READ FROM %@", filename);
         
         NSError *error;
-        
-        
-    
-    
-        
+ 
         //NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:filename];
     
     	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
    		NSString *documentsDirectory = [paths objectAtIndex:0];
     	NSString *filePath1 = [documentsDirectory stringByAppendingPathComponent:@"NoCloud/map.json"];
-    
-    	//NSLog(@"READ FROMXXX %@", filePath1);
     
     	//NSString *filePath1=@"/var/mobile/Containers/Data/Application/ABBF75EB-0520-4FAC-81F2-A7A63141014E/Library/NoCloud/map.json";
         
@@ -296,9 +283,6 @@
 - (void)loadfile:(CDVInvokedUrlCommand*)command
 {
     //[self.commandDelegate runInBackground:^{
-
-
-    NSLog(@"READ FROM %@", @"111");
 
     NSString* filename = [command.arguments objectAtIndex:0];
 
